@@ -1,0 +1,78 @@
+#!/usr/bin/ksh
+#Script for monitoring file system usage and file system mount points for a linux server
+
+dest="Destination Email adress"
+script_path="/home"
+for app in `grep -v "^#" ${script_path}/FSchkMount.cfg | awk '{print $1}'`
+do
+applid=`echo  ${app} | cut -d':' -f1 | grep -v "^#" | awk '{print $1}'`
+echo ${applid}
+
+appserver_path=`echo  ${app} | cut -d':' -f2 | grep -v "^#" | awk '{print $1}'`
+echo ${appserver_path}
+
+for server in `grep -v "^#" ${appserver_path} | awk '{print $1}'`
+do
+echo ${server}
+ssh -q ${server} ser=$server path=${script_path} dest=$dest applid=$applid /bin/ksh << 'EOF'
+
+cat /dev/null | tee ${path}/out.txt /tmp/fsout.txt
+df -h | grep -vE '^Filesystem|tmpfs|var|etc|7b3|systools|openv' | awk '{ print $5,$6}' > ${path}/FSChk.cfg
+while IFS=' ' read -r usage1 fs_path
+do
+usage=`echo $usage1 | cut -d'%' -f1`
+
+#checking Mount points exits or not
+if [[ $(ls ${fs_path}/) ]]; then
+echo "${usage} - ${fs_path} - Ok file exists" >> /tmp/fsout.txt
+else
+echo "${fs_path} - file doesn't exists/files are missing" >> ${path}/out.txt
+fi
+
+#checking fileystem under logs directory and modify threshold based on the requirement
+if [[ "${fs_path}" == "/logs/${applid}/test0" ]]; then
+echo "both strings are same"
+if [[ ${usage} -gt 80 ]]; then
+echo "${usage} - ${fs_path} - Running out of space" >> ${path}/out.txt
+fi
+fi
+
+#checking Filesystem for all the Mount points
+if [[ ${usage} -gt 90 ]]; then
+echo "${usage} - ${fs_path} - Running out of space" >> ${path}/out.txt
+else
+echo "Filsystem is good" >> /tmp/fsout.txt
+fi
+
+done < "${path}/FSChk.cfg"
+
+if [[ -s ${path}/out.txt ]]; then
+echo "${ser} is having issue"
+cat ${path}/out.txt | /bin/mail -s "${ser} is having issue" ${dest}
+else
+echo "No issues"
+fi
+EOF
+done
+done
+
+=======================================
+
+cat FSchkMount.cfg
+
+applid:/path/serverconfiguration list
+applid:/path/serverconfiguration list
+
+eg:
+me0:/tools/scripts/me0/ocp11/ortApp.cfg
+
+------------------------------
+
+cat /tools/scripts/me0/ocp11/ortApp.cfg
+servername instancename
+eg:
+tvmk* sso1
+
+
+
+
