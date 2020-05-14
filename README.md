@@ -1,6 +1,6 @@
 # FSChk-Script
 #Shell Script for monitoring filesystem usage and filesystem mount points in a linux server
-
+# Basically Internal monitoring script
 #Pre-requisites
 
 1.Linux server
