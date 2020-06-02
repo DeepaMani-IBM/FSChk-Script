@@ -4,7 +4,9 @@
 #Pre-requisites
 
 1.Linux server
+
 2.Shell scripting
+
 3.Passwordless login from Jump box to linux servers 
 
 #Script functions
@@ -28,23 +30,22 @@
 cat FSchkMount.cfg - We can mention any number of apps here and configure the servers. 
 
 applid:/path/serverconfiguration list
+
 applid:/path/serverconfiguration list
 
 eg:
+
 me0:/tools/scripts/me0/ocp11/ortApp.cfg
-XXX:path/xxx.cfg
 
 4. Configuration of servers  - serverconfiguration list can be staged here and Main script will ssh to these servers & check the fileystem
 
 eg:
 
 cat /tools/scripts/me0/ocp11/ortApp.cfg
+
 #servername instancename
+
 tvmk*       ss01
-
-cat path/xxx.cfg
-
-hostname instancename
 
 5.Passwordless is required to ssh to individual servers & check the filsystem.
 
