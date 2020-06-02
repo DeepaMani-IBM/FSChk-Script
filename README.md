@@ -20,7 +20,9 @@
 #Installation steps
 
 1.FS_chkScript.sh & FSchkMount.cfg files should be staged in Jump Box server(Main server)
+
 2.FS_chkScript.sh - Main script for checking filesystem of each servers. 
+
 3.FSchkMount.cfg - Configuration of various apps.
 
 cat FSchkMount.cfg - We can mention any number of apps here and configure the servers. 
