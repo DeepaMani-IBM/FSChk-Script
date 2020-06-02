@@ -21,13 +21,13 @@
 
 #Installation steps
 
-1.FS_chkScript.sh & FSchkMount.cfg files should be staged in Jump Box server(Main server)
+1.FS_chkScript.sh & FSchkMount.cfg files should be staged in Jump Box server(Main server) - eg : pvmk1234
 
 2.FS_chkScript.sh - Main script for checking filesystem of each servers. 
 
 3.FSchkMount.cfg - Configuration of various apps.
 
-cat FSchkMount.cfg - We can mention any number of apps here and configure the servers. 
+cat FSchkMount.cfg - We can mention any number of appilcations here and configure the servers of each application
 
 applid:/path/serverconfiguration list
 
@@ -50,3 +50,10 @@ tvmk*       ss01
 5.Passwordless is required to ssh to individual servers & check the filsystem.
 
 Please go through https://www.tecmint.com/ssh-passwordless-login-using-ssh-keygen-in-5-easy-steps/ for setting up passwordless login.
+
+6. Add script to crontab - in Jump Box server(eg: pvmk1234)
+
+crontab -e 
+
+0,15,30,45 * * * * /home/webadmin/scripts/FSChkScript.sh 2> /dev/null
+
